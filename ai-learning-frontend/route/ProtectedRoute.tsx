@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/store/auth';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ProtectedRoute({
                                            children,
@@ -13,14 +13,24 @@ export default function ProtectedRoute({
 }) {
     const { token, role, status } = useAuth();
     const router = useRouter();
+    const [isReady, setIsReady] = useState(false); // chờ zustand khởi tạo
 
     useEffect(() => {
-        if (!token || !allowedRoles.includes(role || '') || status !== 'ACTIVE') {
-            router.replace('/'); // hoặc /login
-        }
-    }, [token, role, status]);
+        // Chờ 1 tick để đảm bảo zustand đã load state từ localStorage/sessionStorage
+        const timeout = setTimeout(() => setIsReady(true), 0);
+        return () => clearTimeout(timeout);
+    }, []);
 
-    if (!token || !allowedRoles.includes(role || '') || status !== 'ACTIVE') return null;
+    useEffect(() => {
+        if (isReady) {
+            if (!token || !allowedRoles.includes(role || '') || status !== 'ACTIVE') {
+                router.replace('/');
+            }
+        }
+    }, [isReady, token, role, status]);
+
+    // Show loading hoặc null trong lúc đợi xác minh
+    if (!isReady) return <div>Loading...</div>;
 
     return <>{children}</>;
 }
