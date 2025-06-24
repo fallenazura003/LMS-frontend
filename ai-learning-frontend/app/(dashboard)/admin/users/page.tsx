@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'; // Chỉ cần DialogTrigger ở đây
-import UserFormDialog from "../../../components/admin/UserFormDialog"
+import UserFormDialog from "../../../../components/admin/UserFormDialog"
 
 interface User {
     id: string;

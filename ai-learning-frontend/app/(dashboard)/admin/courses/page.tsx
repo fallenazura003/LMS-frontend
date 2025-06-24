@@ -52,40 +52,16 @@ export default function AdminCoursesPage() {
             <Table className="bg-white shadow-md rounded-lg">
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Ảnh</TableHead>
                         <TableHead>Tiêu đề</TableHead>
                         <TableHead>Người tạo</TableHead>
                         <TableHead>Ngày tạo</TableHead>
                         <TableHead>Hiển thị</TableHead>
-                        <TableHead>Mô tả</TableHead> {/* Thêm cột mô tả nếu muốn */}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {courses.map((course) => (
                         <TableRow key={course.id}>
-                            <TableCell>
-                                {course.imageUrl && (
-                                    <div className="relative w-20 h-12 overflow-hidden rounded-md">
-                                        {course.imageUrl.startsWith('/uploads/') ? (
-                                            <Image
-                                                src={`http://localhost:8080${course.imageUrl}`}
-                                                alt={course.title}
-                                                layout="fill"
-                                                objectFit="cover"
-                                                className="rounded-md"
-                                            />
-                                        ) : (
-                                            <Image
-                                                src={course.imageUrl}
-                                                alt={course.title}
-                                                layout="fill"
-                                                objectFit="cover"
-                                                className="rounded-md"
-                                            />
-                                        )}
-                                    </div>
-                                )}
-                            </TableCell>
+
                             <TableCell className="font-medium">{course.title}</TableCell>
                             <TableCell>{course.creatorName}</TableCell>
                             <TableCell>{new Date(course.createdAt).toLocaleDateString()}</TableCell>
@@ -93,13 +69,12 @@ export default function AdminCoursesPage() {
                                 <Switch
                                     checked={course.visible}
                                     onCheckedChange={() => toggleCourseVisibility(course.id, course.visible)}
-                                    aria-label={`Toggle visibility for ${course.title}`}
                                 />
                                 <span className="ml-2 text-sm text-gray-500">
-                                    {course.visible ? 'Hiển thị' : 'Ẩn'}
-                                </span>
+          {course.visible ? 'Hiển thị' : 'Ẩn'}
+        </span>
                             </TableCell>
-                            <TableCell className="text-sm text-gray-600">{course.description.substring(0, 50)}...</TableCell>
+
                         </TableRow>
                     ))}
                 </TableBody>
