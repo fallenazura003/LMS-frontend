@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import AddNewCourseDialog from '@/components/course/AddNewCourseDialog'; // Đảm bảo đường dẫn đúng
 import api from '@/lib/api'; // Sử dụng instance api đã cấu hình
 import CourseCard from '@/components/course/CourseCard'; // Sử dụng CourseCard chung
-import { useAuth } from '@/store/auth'; // Để lấy userRole
+import { useAuth } from '@/store/auth';
+import AddNewCourseAiDialog from "@/components/course/AddNewCourseAiDialog"; // Để lấy userRole
 
 interface Course {
     id: string;
@@ -49,10 +50,17 @@ export default function TeacherCourseListPage() {
         <div className="mt-10 p-6">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="font-bold text-3xl text-gray-800">Khóa học của bạn</h2>
+
                 {role === 'TEACHER' && (
-                    <AddNewCourseDialog onCourseCreated={GetCourseList}>
-                        <Button>+ Tạo khóa học mới</Button>
-                    </AddNewCourseDialog>
+                    <div className="flex gap-2">
+                        <AddNewCourseDialog onCourseCreated={GetCourseList}>
+                            <Button>+ Tạo thủ công</Button>
+                        </AddNewCourseDialog>
+
+                        <AddNewCourseAiDialog onCourseCreated={GetCourseList}>
+                            <Button variant="outline">🤖 Tạo bằng AI</Button>
+                        </AddNewCourseAiDialog>
+                    </div>
                 )}
             </div>
 
