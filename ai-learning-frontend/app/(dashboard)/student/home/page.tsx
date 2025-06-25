@@ -18,16 +18,18 @@ interface Course {
 }
 
 export default function StudentHomePage() {
-    const [courseList, setCourseList] = useState<Course[]>([]);
+    const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
+    const [exploreCourses, setExploreCourses] = useState<Course[]>([]);
     const { role } = useAuth();
 
     const getCourses = async () => {
         try {
-            const result = await api.get<Course[]>('/student/courses');
-            console.log("Danh sách khóa học đã mua:", result.data);
-            setCourseList(result.data);
+            const res1 = await api.get<Course[]>('/student/courses'); // đã mua
+            setPurchasedCourses(res1.data);
+            const res2 = await api.get<Course[]>('/student/explore'); // visible chưa mua
+            setExploreCourses(res2.data);
         } catch (error) {
-            console.error("Lỗi khi tải khóa học:", error);
+            console.error("Lỗi khi tải danh sách khóa học:", error);
         }
     };
 
@@ -41,16 +43,32 @@ export default function StudentHomePage() {
         <div className="p-6">
             <WelcomeBanner />
 
-            {courseList.length > 0 && (
+            {purchasedCourses.length > 0 && (
                 <div className="mt-10">
                     <h2 className="font-bold text-2xl mb-4">Khóa học của bạn</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {courseList.map((course) => (
+                        {purchasedCourses.map((course) => (
                             <CourseCard
                                 key={course.id}
                                 course={course}
                                 isEnrolled={true}
-                                userRole={role as 'STUDENT' | 'TEACHER' | 'ADMIN' | null | undefined}
+                                userRole={role as 'STUDENT'}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {exploreCourses.length > 0 && (
+                <div className="mt-12">
+                    <h2 className="font-bold text-2xl mb-4">Khám phá khóa học</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {exploreCourses.map((course) => (
+                            <CourseCard
+                                key={course.id}
+                                course={course}
+                                isEnrolled={false}
+                                userRole={role as 'STUDENT'}
                             />
                         ))}
                     </div>
